@@ -1,5 +1,8 @@
 import Appearance from "@/components/settings/appearance";
+import ExportAndData from "@/components/settings/exportAndData";
+import Notifications from "@/components/settings/notifications";
 import Preferences from "@/components/settings/preferences";
+import Security from "@/components/settings/security";
 import {
 	Home,
 	Clock,
@@ -57,8 +60,8 @@ export const SETTINGS_OPTIONS = {
 	nav: [
 		{ name: "Preferences", icon: Heart, element: Preferences },
 		{ name: "Appearance and theme", icon: Palette, element: Appearance },
-		{ name: "Export & Data", icon: FileText, element: Preferences },
-		{ name: "Notifications", icon: Bell, element: Preferences },
-		{ name: "Security", icon: ShieldCheck, element: Preferences },
+		{ name: "Export & Data", icon: FileText, element: ExportAndData },
+		{ name: "Notifications", icon: Bell, element: Notifications },
+		{ name: "Security", icon: ShieldCheck, element: Security },
 	],
 } as const;	
