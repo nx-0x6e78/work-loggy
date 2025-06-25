@@ -1,12 +1,10 @@
 "use client";
 
 import {
-	CreditCard,
 	EllipsisVertical,
 	LogOut,
 	Bell,
 	UserCircle2,
-	Settings,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,7 +20,6 @@ import {
 import {
 	SidebarMenu,
 	SidebarMenuButton,
-	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
 import SettingsDialog from "../settings/settings-dialog";

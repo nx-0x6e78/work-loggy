@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { HTMLAttributes, HtmlHTMLAttributes } from "react";
+import { HTMLAttributes } from "react";
 
 export default function Container({
 	children,
@@ -7,7 +7,7 @@ export default function Container({
 	...props
 }: HTMLAttributes<HTMLDivElement> & { children: React.ReactNode }) {
 	return (
-		<section className={cn("h-full max-w-[1440px] mx-auto py-4", className)}>
+		<section className={cn("h-full max-w-[1440px] mx-auto py-4", className)} {...props}>
 			{children}
 		</section>
 	);
