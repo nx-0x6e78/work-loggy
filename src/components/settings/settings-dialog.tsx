@@ -52,10 +52,7 @@ export default function SettingsDialog() {
 					}}
 					required
 				>
-					<SelectTrigger
-						onClick={() => console.log("Select clicked!")}
-						className="w-fit absolute top-4 left-4"
-					>
+					<SelectTrigger className="w-fit absolute top-4 left-4">
 						<SelectValue placeholder="Settings" />
 					</SelectTrigger>
 					<SelectContent>
