@@ -3,16 +3,10 @@ import {
 	SidebarContent,
 	SidebarFooter,
 } from "@/components/ui/sidebar";
+import { CORE_ITEMS } from "@/lib/constants";
 import { Separator } from "../ui/separator";
 import { NavFooter } from "./nav-footer";
 import { NavMain } from "./nav-main";
-import { CORE_ITEMS } from "@/lib/constants";
-
-const user = {
-	name: "shadcn",
-	email: "m@example.com",
-	avatar: "/avatars/shadcn.jpg",
-};
 
 export function AppSidebar() {
 	return (
@@ -22,7 +16,7 @@ export function AppSidebar() {
 				<Separator />
 			</SidebarContent>
 			<SidebarFooter>
-				<NavFooter user={user} />
+				<NavFooter />
 			</SidebarFooter>
 		</Sidebar>
 	);

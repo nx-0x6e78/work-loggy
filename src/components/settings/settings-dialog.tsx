@@ -1,14 +1,14 @@
+import { SETTINGS_OPTIONS } from "@/lib/constants";
+import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Settings } from "lucide-react";
-import { SidebarMenuButton } from "../ui/sidebar";
 import { useState } from "react";
+import { Button } from "../ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogTitle,
 } from "../ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
-import { SETTINGS_OPTIONS } from "@/lib/constants";
 import {
 	Select,
 	SelectContent,
@@ -18,7 +18,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../ui/select";
-import { Button } from "../ui/button";
+import { SidebarMenuButton } from "../ui/sidebar";
 
 export default function SettingsDialog() {
 	const [open, setOpen] = useState(false);

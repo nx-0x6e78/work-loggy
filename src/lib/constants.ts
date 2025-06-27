@@ -4,17 +4,17 @@ import Notifications from "@/components/settings/notifications";
 import Preferences from "@/components/settings/preferences";
 import Security from "@/components/settings/security";
 import {
-	Home,
-	Clock,
-	ListTodoIcon,
-	Calendar,
-	Folder,
-	FileBarChart,
-	ChartArea,
-	Heart,
-	Palette,
-	FileText,
 	Bell,
+	Calendar,
+	ChartArea,
+	Clock,
+	FileBarChart,
+	FileText,
+	Folder,
+	Heart,
+	Home,
+	ListTodoIcon,
+	Palette,
 	ShieldCheck,
 } from "lucide-react";
 
