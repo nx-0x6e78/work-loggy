@@ -28,47 +28,47 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SettingsDialog from "../settings/settings-dialog";
+import { Skeleton } from "../ui/skeleton";
+import { useAuthStore } from "@/stores/auth-store";
 
 export function NavFooter() {
 	const { isMobile } = useSidebar();
-	const { data: session } = useSession()!;
-
-	const [profilePicture, setProfilePicture] = useState<string>();
-	const [userName, setUserName] = useState<string | "Guest">("Guest");
-	const [userEmail, setUserEmail] = useState<string>();
-
-	useEffect(() => {
-		if (session?.user) {
-			setProfilePicture(session.user.image!);
-			setUserName(session.user.name!);
-			setUserEmail(session.user.email);
-		}
-	}, [session]);
+	const { isPending } = useSession();
+	const user = useAuthStore((state) => state.user);
+	const name = user?.name || "Guest";
+	const image = user?.image;
+	const email = user?.email;
 
 	const router = useRouter();
 	return (
 		<>
-			{session?.user && <SettingsDialog />}
+			{user && <SettingsDialog />}
 			<SidebarMenu>
 				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
+					<DropdownMenuTrigger asChild disabled={isPending}>
 						<SidebarMenuButton
 							size="lg"
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground transition-transform"
 						>
-							<Avatar className="h-8 w-8 rounded-lg grayscale">
-								<AvatarImage src={profilePicture} alt={userName} />
-								<AvatarFallback className="rounded-lg">
-									<UserCircle2 size={16} />
-								</AvatarFallback>
-							</Avatar>
-							<div className="grid flex-1 text-left text-sm leading-tight">
-								<span className="truncate font-medium">{userName}</span>
-								<span className="text-muted-foreground truncate text-xs">
-									{userEmail}
-								</span>
-							</div>
-							<EllipsisVertical className="ml-auto size-4" />
+							{isPending ? (
+								<Skeleton />
+							) : (
+								<>
+									<Avatar className="h-8 w-8 rounded-lg">
+										<AvatarImage src={image!} alt={name} />
+										<AvatarFallback className="rounded-lg">
+											<UserCircle2 size={16} />
+										</AvatarFallback>
+									</Avatar>
+									<div className="grid flex-1 text-left text-sm leading-tight">
+										<span className="truncate font-medium">{name}</span>
+										<span className="text-muted-foreground truncate text-xs">
+											{email}
+										</span>
+									</div>
+									<EllipsisVertical className="ml-auto size-4" />
+								</>
+							)}
 						</SidebarMenuButton>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent
@@ -80,20 +80,20 @@ export function NavFooter() {
 						<DropdownMenuLabel className="p-0 font-normal">
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 								<Avatar className="h-8 w-8 rounded-lg">
-									<AvatarImage src={profilePicture} alt={userName} />
+									<AvatarImage src={image!} alt={name} />
 									<AvatarFallback className="rounded-lg">
 										<UserCircle2 size={16} />
 									</AvatarFallback>
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">
-									<span className="truncate font-medium">{userName}</span>
+									<span className="truncate font-medium">{name}</span>
 									<span className="text-muted-foreground truncate text-xs">
-										{userEmail}
+										{email}
 									</span>
 								</div>
 							</div>
 						</DropdownMenuLabel>
-						{session?.user && (
+						{user && (
 							<>
 								<DropdownMenuSeparator />
 								<DropdownMenuGroup>
@@ -113,7 +113,7 @@ export function NavFooter() {
 						{/* Maybe i will use zustand for state management, but need to learn it... */}
 						<DropdownMenuItem
 							onSelect={async () => {
-								if (session?.user)
+								if (user)
 									await signOut({
 										fetchOptions: {
 											onError: () => {
@@ -121,13 +121,14 @@ export function NavFooter() {
 											},
 											onSuccess: () => {
 												toast.success("Successfully logged out!");
+												
 											},
 										},
 									});
 								else router.push("/login");
 							}}
 						>
-							{session?.user ? (
+							{user ? (
 								<>
 									<LogOut />
 									Log out

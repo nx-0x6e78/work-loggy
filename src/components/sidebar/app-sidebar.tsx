@@ -5,12 +5,12 @@ import {
 } from "@/components/ui/sidebar";
 import { CORE_ITEMS } from "@/lib/constants";
 import { Separator } from "../ui/separator";
-import { NavFooter } from "./nav-footer";
-import { NavMain } from "./nav-main";
+import { NavFooter } from "./sidebar-footer";
+import { NavMain } from "./sidebar-main";
 
 export function AppSidebar() {
 	return (
-		<Sidebar variant="floating" collapsible="icon">
+		<Sidebar variant="floating" collapsible="icon" >
 			<SidebarContent>
 				<NavMain items={CORE_ITEMS} />
 				<Separator />

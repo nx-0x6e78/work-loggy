@@ -42,33 +42,34 @@ export default function SettingsDialog() {
 				<DialogDescription className="sr-only">
 					Customize your settings here.
 				</DialogDescription>
-				<Select
-					value={settingsPage.name}
-					onValueChange={(value) => {
-						const matched = SETTINGS_OPTIONS.nav.find(
-							(item) => item.name === value
-						);
-						if (matched) setSettingsPage(matched);
-					}}
-					required
-				>
-					<SelectTrigger className="w-fit absolute top-4 left-4">
-						<SelectValue placeholder="Settings" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectGroup>
-							<SelectLabel>Settings</SelectLabel>
-							{SETTINGS_OPTIONS.nav.map((item, index) => (
-								<SelectItem key={index} value={item.name}>
-									{item.name}
-								</SelectItem>
-							))}
-						</SelectGroup>
-					</SelectContent>
-				</Select>
 				<main className="flex flex-1 flex-col overflow-hidden h-full">
 					<header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-						<div className="flex items-center gap-2 px-4"></div>
+						<div className="flex items-center gap-2 px-4">
+							<Select
+								value={settingsPage.name}
+								onValueChange={(value) => {
+									const matched = SETTINGS_OPTIONS.nav.find(
+										(item) => item.name === value
+									);
+									if (matched) setSettingsPage(matched);
+								}}
+								required
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Settings" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectLabel>Settings</SelectLabel>
+										{SETTINGS_OPTIONS.nav.map((item, index) => (
+											<SelectItem key={index} value={item.name}>
+												{item.name}
+											</SelectItem>
+										))}
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</div>
 					</header>
 					<section className="overflow-y-auto scroll p-4">
 						<settingsPage.element />
