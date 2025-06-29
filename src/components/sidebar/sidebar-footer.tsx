@@ -24,12 +24,11 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { signOut, useSession } from "@/lib/auth-client";
+import { useAuthStore } from "@/stores/auth-store";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SettingsDialog from "../settings/settings-dialog";
 import { Skeleton } from "../ui/skeleton";
-import { useAuthStore } from "@/stores/auth-store";
 
 export function NavFooter() {
 	const { isMobile } = useSidebar();
@@ -62,7 +61,7 @@ export function NavFooter() {
 									</Avatar>
 									<div className="grid flex-1 text-left text-sm leading-tight">
 										<span className="truncate font-medium">{name}</span>
-										<span className="text-muted-foreground truncate text-xs">
+										<span className="text-muted-foreground truncate text-xs blur-[3px] hover:blur-none transition-[all]">
 											{email}
 										</span>
 									</div>
@@ -87,7 +86,17 @@ export function NavFooter() {
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-medium">{name}</span>
-									<span className="text-muted-foreground truncate text-xs">
+									<span
+										className="text-muted-foreground truncate text-xs blur-[3px] hover:blur-none transition-[all] cursor-pointer"
+										onClick={async () => {
+											if (!navigator.clipboard)
+												return toast.error(
+													"Please, allow access to clipboard."
+												);
+											await navigator.clipboard.writeText(email!);
+											toast.success("Email copied to clipboard.");
+										}}
+									>
 										{email}
 									</span>
 								</div>
@@ -121,7 +130,6 @@ export function NavFooter() {
 											},
 											onSuccess: () => {
 												toast.success("Successfully logged out!");
-												
 											},
 										},
 									});
