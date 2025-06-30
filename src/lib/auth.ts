@@ -19,5 +19,20 @@ export const auth = betterAuth({
 			clientId: process.env.GITHUB_CLIENT_ID as string,
 			clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
 		},
+		google: {
+			clientId: process.env.GOOGLE_CLIENT_ID! as string,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET! as string,
+		},
 	},
+	session: {
+		expiresIn: 60 * 60 * 24 * 31,
+	},
+	advanced: {
+		useSecureCookies: true,
+		defaultCookieAttributes: {
+			httpOnly: true,
+			secure: true,
+		},
+	},
+	appName: "work-loggy",
 });
