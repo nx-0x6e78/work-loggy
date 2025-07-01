@@ -53,9 +53,6 @@
 	h3 {
 		font-size: var(--text-lg);
 	}
-	button {
-		@apply px-4 py-2 rounded-xl bg-background outline-2 outline-foreground hover:scale-105 transition;
-	}
 }
 
 :root {
@@ -133,15 +130,6 @@
 	}
 	body {
 		@apply bg-background text-foreground h-[100dvh];
-	}
-}
-
-@layer base {
-	* {
-		@apply border-border outline-ring/50;
-	}
-	body {
-		@apply bg-background text-foreground;
 	}
 }
 

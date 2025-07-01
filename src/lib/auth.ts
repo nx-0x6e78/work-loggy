@@ -34,5 +34,10 @@ export const auth = betterAuth({
 			secure: true,
 		},
 	},
+	user: {
+		additionalFields: {
+			surname: { type: "string" },
+		},
+	},
 	appName: "work-loggy",
 });

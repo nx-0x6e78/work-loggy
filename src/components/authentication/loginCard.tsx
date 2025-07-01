@@ -1,4 +1,10 @@
+"use client";
+
+import { signIn } from "@/lib/auth-client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import {
 	Card,
@@ -9,10 +15,19 @@ import {
 	CardHeader,
 	CardTitle,
 } from "../ui/card";
+import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Separator } from "../ui/separator";
 
 export default function LoginCard() {
+	const [email, setEmail] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
+	const [rememberMe, setRememberMe] = useState<boolean>(false);
+
+	const [loading, setLoading] = useState(false);
+	const router = useRouter();
+
 	return (
 		<Card className="w-full max-w-sm md:max-w-lg">
 			<CardHeader>
@@ -33,41 +48,72 @@ export default function LoginCard() {
 				</CardAction>
 			</CardHeader>
 			<CardContent>
-				<form>
-					<div className="flex flex-col gap-6">
-						<div className="grid gap-2">
-							<Label htmlFor="email">Email</Label>
-							<Input
-								id="email"
-								type="email"
-								placeholder="m@example.com"
-								required
-							/>
+				<div className="flex flex-col gap-6">
+					<div className="grid gap-2">
+						<Label htmlFor="email">Email</Label>
+						<Input
+							type="email"
+							placeholder="m@example.com"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							required
+						/>
+					</div>
+					<div className="grid gap-2">
+						<div className="flex items-center">
+							<Label htmlFor="password">Password</Label>
 						</div>
-						<div className="grid gap-2">
-							<div className="flex items-center">
-								<Label htmlFor="password">Password</Label>
-								<a
-									href="#"
-									className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-								>
-									Forgot your password?
-								</a>
+						<Input
+							type="password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							required
+						/>
+						<div className="flex flex-row justify-between">
+							<a
+								href="#"
+								className="inline-block text-sm underline-offset-4 hover:underline"
+							>
+								Forgot your password?
+							</a>
+							<div className="flex items-center gap-2">
+								<Label htmlFor="rememberMe">Remember me</Label>
+								<Checkbox
+									onCheckedChange={() => setRememberMe(!rememberMe)}
+									checked={rememberMe}
+								/>
 							</div>
-							<Input id="password" type="password" required />
 						</div>
 					</div>
-				</form>
-			</CardContent>
-			<CardFooter className="flex-col gap-2 mt-auto">
-				<Button type="submit" className="w-full">
-					Login
-				</Button>
-				<div className="flex">
-					<Button variant="outline" className="w-full">
-						Login with Google
-					</Button>
 				</div>
+			</CardContent>
+			<Separator orientation="horizontal" />
+			<CardFooter className="flex-col gap-2">
+				<Button
+					className="w-full cursor-pointer"
+					disabled={loading}
+					onClick={async () => {
+						await signIn.email(
+							{
+								email: email,
+								password: password,
+								rememberMe: rememberMe,
+							},
+							{
+								onRequest: () => setLoading(true),
+								onResponse: () => setLoading(false),
+								onError: (ctx) => {
+									toast.error(ctx.error.message);
+								},
+								onSuccess: () => {
+									router.replace("/");
+								},
+							}
+						);
+					}}
+				>
+					{loading ? "Logging in..." : "Log in"}
+				</Button>
 			</CardFooter>
 		</Card>
 	);

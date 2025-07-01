@@ -2,7 +2,7 @@
 
 import { signUp } from "@/lib/auth-client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
@@ -20,11 +20,13 @@ import { Label } from "../ui/label";
 
 export default function SignUpCard() {
 	const [name, setName] = useState<string>("");
+	const [surname, setSurname] = useState<string>("");
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [confirmationPassword, setConfirmationPassword] = useState<string>("");
 
 	const [loading, setLoading] = useState(false);
+	const router = useRouter();
 
 	return (
 		<Card className="w-full max-w-sm md:max-w-lg">
@@ -45,15 +47,26 @@ export default function SignUpCard() {
 			</CardHeader>
 			<CardContent>
 				<div className="flex flex-col gap-6">
-					<div className="grid gap-2">
-						<Label htmlFor="name">Name</Label>
-						<Input
-							type="text"
-							placeholder="Jeff"
-							required
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
+					<div className="grid grid-cols-2 gap-2">
+						<div className="grid gap-2">
+							<Label htmlFor="name">Name</Label>
+							<Input
+								type="text"
+								placeholder="Jeff"
+								required
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+							/>
+						</div>
+						<div className="grid gap-2">
+							<Label htmlFor="name">Surname</Label>
+							<Input
+								type="text"
+								placeholder="Bezos"
+								value={surname}
+								onChange={(e) => setSurname(e.target.value)}
+							/>
+						</div>
 					</div>
 					<div className="grid gap-2">
 						<Label htmlFor="email">Email</Label>
@@ -72,6 +85,7 @@ export default function SignUpCard() {
 							required
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
+							placeholder="********"
 						/>
 					</div>
 					<div className="grid gap-2">
@@ -81,6 +95,7 @@ export default function SignUpCard() {
 							required
 							value={confirmationPassword}
 							onChange={(e) => setConfirmationPassword(e.target.value)}
+							placeholder="********"
 						/>
 					</div>
 				</div>
@@ -101,15 +116,17 @@ export default function SignUpCard() {
 							{
 								onRequest: () => setLoading(true),
 								onResponse: () => setLoading(false),
-								onError: ({ error }) => {
-									toast.error(error.message);
+								onError: (ctx) => {
+									toast.error(ctx.error.message);
 								},
-								onSuccess: () => redirect("/"),
+								onSuccess: () => {
+									router.replace("/");
+								},
 							}
 						);
 					}}
 				>
-					Sign up
+					{loading ? "Signing up..." : "Sign up"}
 				</Button>
 			</CardFooter>
 		</Card>
