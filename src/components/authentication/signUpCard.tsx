@@ -17,6 +17,7 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { checkUser } from "@/lib/validation";
 
 export default function SignUpCard() {
 	const [name, setName] = useState<string>("");
@@ -106,24 +107,40 @@ export default function SignUpCard() {
 					disabled={loading}
 					type="submit"
 					onClick={async () => {
-						await signUp.email(
-							{
+						setLoading(true);
+						try {
+							const userResult = await checkUser({
 								name: name,
+								surname: surname,
 								email: email,
 								password: password,
-								callbackURL: "/",
-							},
-							{
-								onRequest: () => setLoading(true),
-								onResponse: () => setLoading(false),
-								onError: (ctx) => {
-									toast.error(ctx.error.message);
+								confirmationPassword: confirmationPassword,
+							});
+
+							if (userResult.error)
+								throw new Error(userResult.error?.issues[0].message);
+
+							await signUp.email(
+								{
+									name: userResult.data.name,
+									email: userResult.data.email,
+									password: userResult.data.password,
+									callbackURL: "/",
 								},
-								onSuccess: () => {
-									router.replace("/");
-								},
-							}
-						);
+								{
+									onError: (ctx) => {
+										toast.error(ctx.error.message);
+									},
+									onSuccess: () => {
+										router.replace("/");
+									},
+								}
+							);
+						} catch (error) {
+							if (error instanceof Error) toast.error(error.message);
+						} finally {
+							setLoading(false);
+						}
 					}}
 				>
 					{loading ? "Signing up..." : "Sign up"}

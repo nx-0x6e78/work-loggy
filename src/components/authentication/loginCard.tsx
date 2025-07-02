@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn } from "@/lib/auth-client";
+import { checkUser } from "@/lib/validation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,7 +19,6 @@ import {
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Separator } from "../ui/separator";
 
 export default function LoginCard() {
 	const [email, setEmail] = useState<string>("");
@@ -87,29 +87,40 @@ export default function LoginCard() {
 					</div>
 				</div>
 			</CardContent>
-			<Separator orientation="horizontal" />
 			<CardFooter className="flex-col gap-2">
 				<Button
 					className="w-full cursor-pointer"
 					disabled={loading}
 					onClick={async () => {
-						await signIn.email(
-							{
+						setLoading(true);
+						try {
+							const userResult = await checkUser({
 								email: email,
 								password: password,
-								rememberMe: rememberMe,
-							},
-							{
-								onRequest: () => setLoading(true),
-								onResponse: () => setLoading(false),
-								onError: (ctx) => {
-									toast.error(ctx.error.message);
+								name: "",
+								confirmationPassword: "",
+							});
+
+							await signIn.email(
+								{
+									email: email,
+									password: password,
+									rememberMe: rememberMe,
 								},
-								onSuccess: () => {
-									router.replace("/");
-								},
-							}
-						);
+								{
+									onError: (ctx) => {
+										toast.error(ctx.error.message);
+									},
+									onSuccess: () => {
+										router.replace("/");
+									},
+								}
+							);
+						} catch (err) {
+							if (err instanceof Error) toast.error(err.message);
+						} finally {
+							setLoading(false);
+						}
 					}}
 				>
 					{loading ? "Logging in..." : "Log in"}
