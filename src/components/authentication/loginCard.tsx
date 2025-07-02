@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "@/lib/auth-client";
-import { checkUser } from "@/lib/validation";
+import { checkUserLogin } from "@/lib/validation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -94,12 +94,13 @@ export default function LoginCard() {
 					onClick={async () => {
 						setLoading(true);
 						try {
-							const userResult = await checkUser({
+							const userResult = await checkUserLogin({
 								email: email,
 								password: password,
-								name: "",
-								confirmationPassword: "",
 							});
+
+							if (userResult.error)
+								throw new Error(userResult.error.issues[0].message);
 
 							await signIn.email(
 								{

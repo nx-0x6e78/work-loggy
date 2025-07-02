@@ -11,7 +11,12 @@ export const passwordSchema = z
 		z.maxLength(128, "Password must be at most 128 characters long")
 	);
 
-export const userSchema = z
+export const logInUserSchema = z.object({
+	email: emailSchema,
+	password: z.string().check(z.minLength(1, "Invalid password")),
+});
+
+export const signUpUserSchema = z
 	.object({
 		name: z.string().check(z.trim(), z.minLength(1, "Name is required")),
 		surname: z.optional(z.string().check(z.trim())),
