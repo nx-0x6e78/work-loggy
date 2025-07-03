@@ -19,11 +19,13 @@ import {
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Eye, EyeClosed } from "lucide-react";
 
 export default function LoginCard() {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [rememberMe, setRememberMe] = useState<boolean>(false);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
@@ -63,12 +65,22 @@ export default function LoginCard() {
 						<div className="flex items-center">
 							<Label htmlFor="password">Password</Label>
 						</div>
-						<Input
-							type="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							required
-						/>
+						<div className="flex flex-row gap-2">
+							<Input
+								type={showPassword ? "text" : "password"}
+								value={password}
+								placeholder="********"
+								onChange={(e) => setPassword(e.target.value)}
+								required
+							/>
+							<Button
+								onClick={() => {
+									setShowPassword(!showPassword);
+								}}
+							>
+								{showPassword ? <EyeClosed /> : <Eye />}
+							</Button>
+						</div>
 						<div className="flex flex-row justify-between">
 							<a
 								href="#"

@@ -1,7 +1,6 @@
 import { PrismaClient } from "@/generated/prisma";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { toast } from "sonner";
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({

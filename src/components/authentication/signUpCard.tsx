@@ -17,7 +17,8 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { checkUser } from "@/lib/validation";
+import { checkUserSignup } from "@/lib/validation";
+import { Eye, EyeClosed } from "lucide-react";
 
 export default function SignUpCard() {
 	const [name, setName] = useState<string>("");
@@ -25,6 +26,7 @@ export default function SignUpCard() {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [confirmationPassword, setConfirmationPassword] = useState<string>("");
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
@@ -81,18 +83,27 @@ export default function SignUpCard() {
 					</div>
 					<div className="grid gap-2">
 						<Label htmlFor="password">Password</Label>
-						<Input
-							type="password"
-							required
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							placeholder="********"
-						/>
+						<div className="flex gap-2">
+							<Input
+								type={showPassword ? "text" : "password"}
+								required
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								placeholder="********"
+							/>
+							<Button
+								onClick={() => {
+									setShowPassword(!showPassword);
+								}}
+							>
+								{showPassword ? <EyeClosed /> : <Eye />}
+							</Button>
+						</div>
 					</div>
 					<div className="grid gap-2">
 						<Label htmlFor="confirmPassword">Confirm Password</Label>
 						<Input
-							type="password"
+							type={showPassword ? "text" : "password"}
 							required
 							value={confirmationPassword}
 							onChange={(e) => setConfirmationPassword(e.target.value)}
@@ -109,7 +120,7 @@ export default function SignUpCard() {
 					onClick={async () => {
 						setLoading(true);
 						try {
-							const userResult = await checkUser({
+							const userResult = await checkUserSignup({
 								name: name,
 								surname: surname,
 								email: email,
@@ -118,7 +129,7 @@ export default function SignUpCard() {
 							});
 
 							if (userResult.error)
-								throw new Error(userResult.error?.issues[0].message);
+								throw new Error(userResult.error.issues[0].message);
 
 							await signUp.email(
 								{
@@ -137,7 +148,9 @@ export default function SignUpCard() {
 								}
 							);
 						} catch (error) {
-							if (error instanceof Error) toast.error(error.message);
+							if (error instanceof Error) {
+								toast.error(error.message);
+							}
 						} finally {
 							setLoading(false);
 						}

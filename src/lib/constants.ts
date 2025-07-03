@@ -1,6 +1,6 @@
 import Appearance from "@/components/settings/appearance";
 import ExportAndData from "@/components/settings/exportAndData";
-import Notifications from "@/components/settings/notifications";
+import Notifications from "../../coverage/notifications";
 import Preferences from "@/components/settings/preferences";
 import Security from "@/components/settings/security";
 import {
@@ -26,32 +26,32 @@ export const CORE_ITEMS = [
 	},
 	{
 		title: "Time tracking",
-		url: "#",
+		url: "/time-tracking",
 		icon: Clock,
 	},
 	{
 		title: "Tasks",
-		url: "#",
+		url: "/tasks",
 		icon: ListTodoIcon,
 	},
 	{
 		title: "Calendar",
-		url: "#",
+		url: "/calendar",
 		icon: Calendar,
 	},
 	{
 		title: "Projects",
-		url: "#",
+		url: "/projects",
 		icon: Folder,
 	},
 	{
 		title: "Reports",
-		url: "#",
+		url: "/reports",
 		icon: FileBarChart,
 	},
 	{
 		title: "Analytics",
-		url: "#",
+		url: "/analytics",
 		icon: ChartArea,
 	},
 ] as const;
@@ -64,4 +64,7 @@ export const SETTINGS_OPTIONS = {
 		{ name: "Notifications", icon: Bell, element: Notifications },
 		{ name: "Security", icon: ShieldCheck, element: Security },
 	],
-} as const;	
+} as const;
+
+export const VALID_SYMBOLS=
+	`~!@#$%^&*()_\\-+={[]}|:;"'<,>.?/` as const;
