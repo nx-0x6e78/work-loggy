@@ -24,10 +24,12 @@ function ThemedToaster() {
 }
 
 function AuthInitializer() {
-	const { data: session } = useSession();
+	const { data: session, isPending } = useSession();
 	const setUser = useAuthStore((state) => state.setUser);
+	const setIsPending = useAuthStore((state) => state.setIsPending);
 
 	useEffect(() => {
+		setIsPending(isPending);
 		if (session?.user) {
 			setUser({
 				name: session.user.name,
@@ -37,7 +39,7 @@ function AuthInitializer() {
 		} else {
 			setUser(null);
 		}
-	}, [session, setUser]);
+	}, [session, setUser, isPending, setIsPending]);
 
 	return null;
 }

@@ -27,16 +27,17 @@ import { signOut, useSession } from "@/lib/auth-client";
 import { useAuthStore } from "@/stores/auth-store";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import SettingsDialog from "../settings/settings-dialog";
+import SettingsDialog from "../dialogs/settings-dialog";
+import AccountDialog from "../dialogs/account-dialog";
 import { Skeleton } from "../ui/skeleton";
 
 export function NavFooter() {
 	const { isMobile } = useSidebar();
-	const { isPending } = useSession();
 	const user = useAuthStore((state) => state.user);
 	const name = user?.name || "Guest";
 	const image = user?.image;
 	const email = user?.email;
+	const isPending = useAuthStore((state) => state.isPending);
 
 	const router = useRouter();
 	return (
@@ -106,14 +107,11 @@ export function NavFooter() {
 							<>
 								<DropdownMenuSeparator />
 								<DropdownMenuGroup>
-									<DropdownMenuItem>
-										<UserCircle2 size={16} />
-										Account
-									</DropdownMenuItem>
-									<DropdownMenuItem>
+									<AccountDialog />
+									<SidebarMenuButton>
 										<Bell />
 										Notifications
-									</DropdownMenuItem>
+									</SidebarMenuButton>
 								</DropdownMenuGroup>
 							</>
 						)}
@@ -121,6 +119,7 @@ export function NavFooter() {
 						{/* Not sure about this code below, any case, i will change it in future. */}
 						{/* Maybe i will use zustand for state management, but need to learn it... */}
 						<DropdownMenuItem
+							variant={user ? "destructive" : "default"}
 							onSelect={async () => {
 								if (user)
 									await signOut({
