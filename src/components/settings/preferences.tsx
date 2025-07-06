@@ -28,7 +28,7 @@ export default function Preferences() {
 				/>
 			</article>
 			<article className="flex flex-col sm:flex-row justify-between gap-3 bg-background ring-ring ring-1 p-3 px-4 rounded-xl">
-				<Label htmlFor="defaultLunchBreak" className="text-nowrap">
+				<Label htmlFor="defaultHourlyEarnings" className="text-nowrap">
 					Default hourly earnings
 				</Label>
 				<Input
@@ -38,7 +38,7 @@ export default function Preferences() {
 				/>
 			</article>
 			<article className="flex flex-col sm:flex-row justify-between gap-3 bg-background ring-ring ring-1 p-3 px-4 rounded-xl">
-				<Label htmlFor="defaultLunchBreak" className="text-nowrap">
+				<Label htmlFor="hoursRounding" className="text-nowrap">
 					Rounding of the hours
 				</Label>
 				<Input
