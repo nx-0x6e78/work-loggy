@@ -93,8 +93,6 @@ export default function AccountDialog() {
 												try {
 													const file = e.currentTarget.files![0];
 
-													// will do the validation in zod, and custom errors
-													// the code below is ONLY for testing
 													if (!file) throw new Error("Select an image!");
 													if (file.size > 3000000)
 														throw new Error(

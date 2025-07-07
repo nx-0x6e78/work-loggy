@@ -31,10 +31,10 @@ import SettingsDialog from "../dialogs/settings-dialog";
 import AccountDialog from "../dialogs/account-dialog";
 import { Skeleton } from "../ui/skeleton";
 
-export function NavFooter() {
+export function AppSidebarFooter() {
 	const { isMobile } = useSidebar();
 	const user = useAuthStore((state) => state.user);
-	const name = user?.name || "Guest";
+	const name = user?.name ?? "Guest";
 	const image = user?.image;
 	const email = user?.email;
 	const isPending = useAuthStore((state) => state.isPending);
@@ -56,7 +56,7 @@ export function NavFooter() {
 								<>
 									<Avatar className="h-8 w-8 rounded-lg">
 										<AvatarImage
-											src={image!}
+											src={image ?? ""}
 											alt={name}
 											className="object-cover object-center"
 										/>
@@ -85,7 +85,7 @@ export function NavFooter() {
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 								<Avatar className="h-8 w-8 rounded-lg">
 									<AvatarImage
-										src={image!}
+										src={image ?? ""}
 										alt={name}
 										className="object-cover object-center"
 									/>
@@ -124,8 +124,6 @@ export function NavFooter() {
 							</>
 						)}
 						<DropdownMenuSeparator />
-						{/* Not sure about this code below, any case, i will change it in future. */}
-						{/* Maybe i will use zustand for state management, but need to learn it... */}
 						<DropdownMenuItem
 							variant={user ? "destructive" : "default"}
 							onSelect={async () => {

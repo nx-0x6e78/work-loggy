@@ -1,7 +1,7 @@
 import Appearance from "@/components/settings/appearance";
 import ExportAndData from "@/components/settings/exportAndData";
 import Notifications from "../../coverage/notifications";
-import Preferences from "@/components/settings/preferences";
+import Preferences from "../../coverage/preferences";
 import Security from "@/components/settings/security";
 import {
 	Bell,
@@ -66,5 +66,6 @@ export const SETTINGS_OPTIONS = {
 	],
 } as const;
 
-export const VALID_SYMBOLS=
-	`~!@#$%^&*()_\\-+={[]}|:;"'<,>.?/` as const;
+export const VALID_SYMBOLS = `~!@#$%^&*()_\\-+={[]}|:;"'<,>.?/` as const;
+export const ESCAPED_SYMBOLS =
+	`~!@#\\$%\\^&\\*\\(\\)_\\\\\\-\\+=\\{\\[\\]\\}\\|:;"'<,>\\.\\?/` as const;

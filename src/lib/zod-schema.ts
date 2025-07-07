@@ -1,5 +1,5 @@
 import * as z from "zod/v4-mini";
-import { VALID_SYMBOLS } from "./constants";
+import { ESCAPED_SYMBOLS, VALID_SYMBOLS } from "./constants";
 
 export const emailSchema = z
 	.email("Invalid email")
@@ -17,8 +17,8 @@ export const passwordSchema = z.string("Invalid password").check(
 	z.refine((password) => /[0-9]/.test(password), {
 		error: "Password must contain a number.",
 	}),
-	z.regex(new RegExp(`[${VALID_SYMBOLS}]`), {
-		error: `Password must contain a symbmol, allowed symbols:\n${VALID_SYMBOLS}`,
+	z.refine((password) => new RegExp(`[${ESCAPED_SYMBOLS}]`).test(password), {
+		error: `Password must contain a symbol, allowed symbols:\n${VALID_SYMBOLS}`,
 	})
 );
 

@@ -31,134 +31,145 @@ export default function SignUpCard() {
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
+	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		setLoading(true);
+		try {
+			const userResult = await checkUserSignup({
+				name: name,
+				surname: surname,
+				email: email,
+				password: password,
+				confirmationPassword: confirmationPassword,
+			});
+
+			if (userResult.error) throw new Error(userResult.error.issues[0].message);
+
+			await signUp.email(
+				{
+					name: userResult.data.name,
+					email: userResult.data.email,
+					password: userResult.data.password,
+					callbackURL: "/",
+				},
+				{
+					onError: (ctx) => {
+						toast.error(ctx.error.message);
+					},
+					onSuccess: () => {
+						router.replace("/");
+					},
+				}
+			);
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message);
+			}
+		} finally {
+			setLoading(false);
+		}
+	}
+
 	return (
-		<Card className="w-full max-w-sm md:max-w-lg">
-			<CardHeader>
-				<CardTitle>Sign Up</CardTitle>
-				<CardDescription>Let's begin creating your account.</CardDescription>
-				<CardAction>
-					<Button
-						variant="link"
-						asChild
-						className="hover:scale-105 transition-[scale]"
-					>
-						<Link href={"/login"} className="bg-background">
-							Login
-						</Link>
-					</Button>
-				</CardAction>
-			</CardHeader>
-			<CardContent>
-				<div className="flex flex-col gap-6">
-					<div className="grid grid-cols-2 gap-2">
+		<form onSubmit={handleSubmit} noValidate>
+			<Card className="w-full max-w-sm md:max-w-lg">
+				<CardHeader>
+					<CardTitle>Sign Up</CardTitle>
+					<CardDescription>Let's begin creating your account.</CardDescription>
+					<CardAction>
+						<Button
+							variant="link"
+							asChild
+							type="button"
+							className="hover:scale-105 transition-[scale]"
+						>
+							<Link href={"/login"} className="bg-background">
+								Login
+							</Link>
+						</Button>
+					</CardAction>
+				</CardHeader>
+				<CardContent>
+					<div className="flex flex-col gap-6">
+						<div className="grid grid-cols-2 gap-2">
+							<div className="grid gap-2">
+								<Label htmlFor="name">Name</Label>
+								<Input
+									type="text"
+									placeholder="Jeff"
+									id="name"
+									required
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+								/>
+							</div>
+							<div className="grid gap-2">
+								<Label htmlFor="surname">Surname</Label>
+								<Input
+									type="text"
+									placeholder="Bezos"
+									id="surname"
+									value={surname}
+									onChange={(e) => setSurname(e.target.value)}
+								/>
+							</div>
+						</div>
 						<div className="grid gap-2">
-							<Label htmlFor="name">Name</Label>
+							<Label htmlFor="email">Email</Label>
 							<Input
-								type="text"
-								placeholder="Jeff"
+								type="email"
+								placeholder="m@example.com"
+								id="email"
 								required
-								value={name}
-								onChange={(e) => setName(e.target.value)}
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
 							/>
 						</div>
 						<div className="grid gap-2">
-							<Label htmlFor="name">Surname</Label>
-							<Input
-								type="text"
-								placeholder="Bezos"
-								value={surname}
-								onChange={(e) => setSurname(e.target.value)}
-							/>
+							<Label htmlFor="password">Password</Label>
+							<div className="flex gap-2">
+								<Input
+									type={showPassword ? "text" : "password"}
+									required
+									value={password}
+									id="password"
+									onChange={(e) => setPassword(e.target.value)}
+									placeholder="********"
+								/>
+								<Button
+									onClick={() => {
+										setShowPassword(!showPassword);
+									}}
+									type="button"
+								>
+									{showPassword ? <EyeClosed /> : <Eye />}
+								</Button>
+							</div>
 						</div>
-					</div>
-					<div className="grid gap-2">
-						<Label htmlFor="email">Email</Label>
-						<Input
-							type="email"
-							placeholder="m@example.com"
-							required
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-						/>
-					</div>
-					<div className="grid gap-2">
-						<Label htmlFor="password">Password</Label>
-						<div className="flex gap-2">
+						<div className="grid gap-2">
+							<Label htmlFor="confirmPassword">Confirm Password</Label>
 							<Input
 								type={showPassword ? "text" : "password"}
 								required
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
+								id="confirmPassword"
+								value={confirmationPassword}
+								onChange={(e) => setConfirmationPassword(e.target.value)}
 								placeholder="********"
 							/>
-							<Button
-								onClick={() => {
-									setShowPassword(!showPassword);
-								}}
-							>
-								{showPassword ? <EyeClosed /> : <Eye />}
-							</Button>
 						</div>
 					</div>
-					<div className="grid gap-2">
-						<Label htmlFor="confirmPassword">Confirm Password</Label>
-						<Input
-							type={showPassword ? "text" : "password"}
-							required
-							value={confirmationPassword}
-							onChange={(e) => setConfirmationPassword(e.target.value)}
-							placeholder="********"
-						/>
-					</div>
-				</div>
-			</CardContent>
-			<CardFooter className="flex-col gap-2 mt-auto">
-				<Button
-					className="w-full cursor-pointer"
-					disabled={loading}
-					type="submit"
-					onClick={async () => {
-						setLoading(true);
-						try {
-							const userResult = await checkUserSignup({
-								name: name,
-								surname: surname,
-								email: email,
-								password: password,
-								confirmationPassword: confirmationPassword,
-							});
-
-							if (userResult.error)
-								throw new Error(userResult.error.issues[0].message);
-
-							await signUp.email(
-								{
-									name: userResult.data.name,
-									email: userResult.data.email,
-									password: userResult.data.password,
-									callbackURL: "/",
-								},
-								{
-									onError: (ctx) => {
-										toast.error(ctx.error.message);
-									},
-									onSuccess: () => {
-										router.replace("/");
-									},
-								}
-							);
-						} catch (error) {
-							if (error instanceof Error) {
-								toast.error(error.message);
-							}
-						} finally {
-							setLoading(false);
-						}
-					}}
-				>
-					{loading ? "Signing up..." : "Sign up"}
-				</Button>
-			</CardFooter>
-		</Card>
+				</CardContent>
+				<CardFooter className="flex-col gap-2 mt-auto">
+					<Button
+						className="w-full cursor-pointer"
+						disabled={loading}
+						type="submit"
+						// onClick={handleSubmit}
+					>
+						{loading ? "Signing up..." : "Sign up"}
+					</Button>
+				</CardFooter>
+			</Card>
+		</form>
 	);
 }

@@ -9,7 +9,7 @@ import {
 	SidebarMenuItem,
 } from "../ui/sidebar";
 
-export function NavMain({
+export function AppSidebarMain({
 	items,
 }: {
 	items: Readonly<

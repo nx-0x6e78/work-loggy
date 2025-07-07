@@ -30,115 +30,124 @@ export default function LoginCard() {
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
+	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		setLoading(true);
+		try {
+			const userResult = await checkUserLogin({
+				email: email,
+				password: password,
+			});
+
+			if (userResult.error) throw new Error(userResult.error.issues[0].message);
+
+			await signIn.email(
+				{
+					email: email,
+					password: password,
+					rememberMe: rememberMe,
+				},
+				{
+					onError: (ctx) => {
+						toast.error(ctx.error.message);
+					},
+					onSuccess: () => {
+						router.replace("/");
+					},
+				}
+			);
+		} catch (err) {
+			if (err instanceof Error) toast.error(err.message);
+		} finally {
+			setLoading(false);
+		}
+	}
+
 	return (
-		<Card className="w-full max-w-sm md:max-w-lg">
-			<CardHeader>
-				<CardTitle>Login to your account</CardTitle>
-				<CardDescription>
-					Enter your email below to login to your account
-				</CardDescription>
-				<CardAction>
-					<Button
-						variant="link"
-						asChild
-						className="hover:scale-105 transition-[scale]"
-					>
-						<Link href={"/sign-up"} className="bg-background">
-							Sign up
-						</Link>
-					</Button>
-				</CardAction>
-			</CardHeader>
-			<CardContent>
-				<div className="flex flex-col gap-6">
-					<div className="grid gap-2">
-						<Label htmlFor="email">Email</Label>
-						<Input
-							type="email"
-							placeholder="m@example.com"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							required
-						/>
-					</div>
-					<div className="grid gap-2">
-						<div className="flex items-center">
-							<Label htmlFor="password">Password</Label>
-						</div>
-						<div className="flex flex-row gap-2">
+		<form onSubmit={handleSubmit} noValidate>
+			<Card className="w-full max-w-sm md:max-w-lg">
+				<CardHeader>
+					<CardTitle>Login to your account</CardTitle>
+					<CardDescription>
+						Enter your email below to login to your account
+					</CardDescription>
+					<CardAction>
+						<Button
+							variant="link"
+							asChild
+							type="button"
+							className="hover:scale-105 transition-[scale]"
+						>
+							<Link href={"/sign-up"} className="bg-background">
+								Sign up
+							</Link>
+						</Button>
+					</CardAction>
+				</CardHeader>
+				<CardContent>
+					<div className="flex flex-col gap-6">
+						<div className="grid gap-2">
+							<Label htmlFor="email">Email</Label>
 							<Input
-								type={showPassword ? "text" : "password"}
-								value={password}
-								placeholder="********"
-								onChange={(e) => setPassword(e.target.value)}
+								type="email"
+								placeholder="m@example.com"
+								value={email}
+								id="email"
+								onChange={(e) => setEmail(e.target.value)}
 								required
 							/>
-							<Button
-								onClick={() => {
-									setShowPassword(!showPassword);
-								}}
-							>
-								{showPassword ? <EyeClosed /> : <Eye />}
-							</Button>
 						</div>
-						<div className="flex flex-row justify-between">
-							<a
-								href="#"
-								className="inline-block text-sm underline-offset-4 hover:underline"
-							>
-								Forgot your password?
-							</a>
-							<div className="flex items-center gap-2">
-								<Label htmlFor="rememberMe">Remember me</Label>
-								<Checkbox
-									onCheckedChange={() => setRememberMe(!rememberMe)}
-									checked={rememberMe}
+						<div className="grid gap-2">
+							<div className="flex items-center">
+								<Label htmlFor="password">Password</Label>
+							</div>
+							<div className="flex flex-row gap-2">
+								<Input
+									type={showPassword ? "text" : "password"}
+									value={password}
+									id="password"
+									placeholder="********"
+									onChange={(e) => setPassword(e.target.value)}
+									required
 								/>
+								<Button
+									onClick={() => {
+										setShowPassword(!showPassword);
+									}}
+									type="button"
+								>
+									{showPassword ? <EyeClosed /> : <Eye />}
+								</Button>
+							</div>
+							<div className="flex flex-row justify-between">
+								<a
+									href="#"
+									className="inline-block text-sm underline-offset-4 hover:underline"
+								>
+									Forgot your password?
+								</a>
+								<div className="flex items-center gap-2">
+									<Label htmlFor="rememberMe">Remember me</Label>
+									<Checkbox
+										onCheckedChange={() => setRememberMe(!rememberMe)}
+										checked={rememberMe}
+										id="rememberMe"
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</CardContent>
-			<CardFooter className="flex-col gap-2">
-				<Button
-					className="w-full cursor-pointer"
-					disabled={loading}
-					onClick={async () => {
-						setLoading(true);
-						try {
-							const userResult = await checkUserLogin({
-								email: email,
-								password: password,
-							});
-
-							if (userResult.error)
-								throw new Error(userResult.error.issues[0].message);
-
-							await signIn.email(
-								{
-									email: email,
-									password: password,
-									rememberMe: rememberMe,
-								},
-								{
-									onError: (ctx) => {
-										toast.error(ctx.error.message);
-									},
-									onSuccess: () => {
-										router.replace("/");
-									},
-								}
-							);
-						} catch (err) {
-							if (err instanceof Error) toast.error(err.message);
-						} finally {
-							setLoading(false);
-						}
-					}}
-				>
-					{loading ? "Logging in..." : "Log in"}
-				</Button>
-			</CardFooter>
-		</Card>
+				</CardContent>
+				<CardFooter className="flex-col gap-2">
+					<Button
+						className="w-full cursor-pointer"
+						disabled={loading}
+						type="submit"
+					>
+						{loading ? "Logging in..." : "Log in"}
+					</Button>
+				</CardFooter>
+			</Card>
+		</form>
 	);
 }
