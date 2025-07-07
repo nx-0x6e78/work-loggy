@@ -55,7 +55,11 @@ export function NavFooter() {
 							) : (
 								<>
 									<Avatar className="h-8 w-8 rounded-lg">
-										<AvatarImage src={image!} alt={name} />
+										<AvatarImage
+											src={image!}
+											alt={name}
+											className="object-cover object-center"
+										/>
 										<AvatarFallback className="rounded-lg">
 											<UserCircle2 size={16} />
 										</AvatarFallback>
@@ -80,7 +84,11 @@ export function NavFooter() {
 						<DropdownMenuLabel className="p-0 font-normal">
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 								<Avatar className="h-8 w-8 rounded-lg">
-									<AvatarImage src={image!} alt={name} />
+									<AvatarImage
+										src={image!}
+										alt={name}
+										className="object-cover object-center"
+									/>
 									<AvatarFallback className="rounded-lg">
 										<UserCircle2 size={16} />
 									</AvatarFallback>

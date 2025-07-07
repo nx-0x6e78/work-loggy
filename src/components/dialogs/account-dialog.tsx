@@ -16,10 +16,12 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { SidebarMenuButton } from "../ui/sidebar";
+import { toast } from "sonner";
 
 export default function AccountDialog() {
 	const [open, setOpen] = useState(false);
 	const user = useAuthStore((state) => state.user);
+	const setUser = useAuthStore((state) => state.setUser);
 	const name = user?.name;
 	const email = user?.email;
 	const profilePicture = user?.image;
@@ -64,24 +66,54 @@ export default function AccountDialog() {
 								</div>
 							</div>
 						</article>
-						<article>
+						<article className="flex flex-col gap-2">
 							<Label htmlFor="profilePicture">Profile picture</Label>
 							<div className="flex items-center justify-center relative">
 								<div className="relative">
-									<Avatar className="w-fit h-fit">
-										<AvatarImage src={profilePicture!} />
+									<Avatar className="max-w-[128px] max-h-[128px] w-full h-full ring-ring ring-2">
+										<AvatarImage src={profilePicture!} className="object-cover object-center" />
 										<AvatarFallback>
 											<UserCircle size={128} />
 										</AvatarFallback>
 									</Avatar>
-									<div className="absolute -bottom-4">
-										<Label htmlFor="input-file" className="ring-1 ring-ring px-2 py-3 rounded-md backdrop-blur-sm">Select a File</Label>
+									<div className="absolute bottom-0 right-2">
+										<Label
+											htmlFor="input-file"
+											className="ring-1 ring-ring px-2 py-3 backdrop-blur-sm rounded-full w-8 h-8"
+										>
+											<Pencil />
+										</Label>
 										<Input
 											type="file"
 											id="input-file"
 											accept="image/jpg, image/jpeg, image/png"
 											multiple={false}
 											className="hidden"
+											onChange={(e) => {
+												try {
+													const file = e.currentTarget.files![0];
+
+													// will do the validation in zod, and custom errors
+													// the code below is ONLY for testing
+													if (!file) throw new Error("Select an image!");
+													if (file.size > 3000000)
+														throw new Error(
+															"Image exceeds size limits, max size 3MB."
+														);
+
+													const reader = new FileReader();
+													reader.onloadend = () => {
+														setUser({
+															name: name!,
+															email: email!,
+															image: reader.result as string,
+														});
+													};
+													reader.readAsDataURL(file);
+												} catch (e) {
+													if (e instanceof Error) toast.error(e.message);
+												}
+											}}
 										/>
 									</div>
 								</div>
