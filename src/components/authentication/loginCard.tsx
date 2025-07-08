@@ -64,8 +64,12 @@ export default function LoginCard() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} noValidate>
-			<Card className="w-full max-w-sm md:max-w-lg">
+		<form
+			onSubmit={handleSubmit}
+			noValidate
+			className="w-full max-w-sm md:max-w-lg"
+		>
+			<Card>
 				<CardHeader>
 					<CardTitle>Login to your account</CardTitle>
 					<CardDescription>

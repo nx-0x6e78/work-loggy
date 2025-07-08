@@ -71,8 +71,12 @@ export default function SignUpCard() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} noValidate>
-			<Card className="w-full max-w-sm md:max-w-lg">
+		<form
+			onSubmit={handleSubmit}
+			noValidate
+			className="w-full max-w-sm md:max-w-lg"
+		>
+			<Card>
 				<CardHeader>
 					<CardTitle>Sign Up</CardTitle>
 					<CardDescription>Let's begin creating your account.</CardDescription>
@@ -96,7 +100,6 @@ export default function SignUpCard() {
 								<Label htmlFor="name">Name</Label>
 								<Input
 									type="text"
-									placeholder="Jeff"
 									id="name"
 									required
 									value={name}
@@ -107,7 +110,6 @@ export default function SignUpCard() {
 								<Label htmlFor="surname">Surname</Label>
 								<Input
 									type="text"
-									placeholder="Bezos"
 									id="surname"
 									value={surname}
 									onChange={(e) => setSurname(e.target.value)}
@@ -164,7 +166,6 @@ export default function SignUpCard() {
 						className="w-full cursor-pointer"
 						disabled={loading}
 						type="submit"
-						// onClick={handleSubmit}
 					>
 						{loading ? "Signing up..." : "Sign up"}
 					</Button>
