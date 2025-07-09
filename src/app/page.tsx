@@ -1,25 +1,20 @@
 import Container from "@/components/container";
-import { Button } from "@/components/ui/button";
+import GetStarted from "@/components/home/getStarted";
+import HomePage from "@/components/home/homePage";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const metadata = {
 	title: "Home",
 };
 
-export default function Home() {
+export default async function Home() {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
 	return (
 		<>
-			<Container>
-				<section className="h-full flex flex-col md:flex-row justify-center items-center gap-3">
-					<section className="flex flex-col gap-y-2">
-						<h1 className="text-xl sm:text-3xl transition-[font]">
-							Monitor your work like you never did.
-						</h1>
-						<Button className="max-w-[120px] md:max-w-[150px] cursor-pointer">
-							Get started now!
-						</Button>
-					</section>
-				</section>
-			</Container>
+			<Container>{session ? <HomePage /> : <GetStarted />}</Container>
 		</>
 	);
 }

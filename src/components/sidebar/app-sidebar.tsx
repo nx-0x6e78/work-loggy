@@ -13,7 +13,7 @@ export function AppSidebar() {
 		<Sidebar variant="floating" collapsible="icon" >
 			<SidebarContent>
 				<AppSidebarMain items={CORE_ITEMS} />
-				<Separator />
+				<Separator className="max-w-[90%] mx-auto"/>
 			</SidebarContent>
 			<SidebarFooter>
 				<AppSidebarFooter />

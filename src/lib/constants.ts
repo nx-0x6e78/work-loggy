@@ -1,10 +1,9 @@
 import Appearance from "@/components/settings/appearance";
 import ExportAndData from "@/components/settings/exportAndData";
-import Notifications from "../../coverage/notifications";
-import Preferences from "../../coverage/preferences";
+// import Notifications from "../../coverage/notifications";
+import Preferences from "@/components/settings/preferences";
 import Security from "@/components/settings/security";
 import {
-	Bell,
 	Calendar,
 	ChartArea,
 	Clock,
@@ -61,7 +60,7 @@ export const SETTINGS_OPTIONS = {
 		{ name: "Preferences", icon: Heart, element: Preferences },
 		{ name: "Appearance and theme", icon: Palette, element: Appearance },
 		{ name: "Export & Data", icon: FileText, element: ExportAndData },
-		{ name: "Notifications", icon: Bell, element: Notifications },
+		// { name: "Notifications", icon: Bell, element: Notifications },
 		{ name: "Security", icon: ShieldCheck, element: Security },
 	],
 } as const;

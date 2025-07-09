@@ -6,14 +6,13 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useSession } from "@/lib/auth-client";
 import { useAuthStore } from "@/stores/auth-store";
 import { useTheme } from "next-themes";
-import { Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-
-const geist = Geist({
-	subsets: ["latin"],
+const adelleSans = localFont({
+	src: "./fonts/Adelle_Sans_Regular.otf",
 });
 
 function ThemedToaster() {
@@ -58,7 +57,7 @@ export default function RootLayout({
 	const [open, setOpen] = useState(false);
 	AuthInitializer();
 	return (
-		<html lang="en" suppressHydrationWarning className={geist.className}>
+		<html lang="en" suppressHydrationWarning className={adelleSans.className}>
 			<body>
 				<SidebarProvider open={open} onOpenChange={setOpen}>
 					<ThemeProvider
