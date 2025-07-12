@@ -7,7 +7,7 @@ export default function Container({
 	...props
 }: HTMLAttributes<HTMLDivElement> & { children: React.ReactNode }) {
 	return (
-		<section className={cn("h-full max-w-[1440px] mx-auto py-8", className)} {...props}>
+		<section className={cn("h-full max-w-[85dvw] mx-auto py-8", className)} {...props}>
 			{children}
 		</section>
 	);

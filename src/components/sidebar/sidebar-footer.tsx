@@ -134,7 +134,7 @@ export function AppSidebarFooter() {
 												toast.error("There was an error while logging out!");
 											},
 											onSuccess: () => {
-												toast.success("Successfully logged out!");
+												router.replace("/");
 											},
 										},
 									});
