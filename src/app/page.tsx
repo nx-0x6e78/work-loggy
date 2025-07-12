@@ -14,7 +14,7 @@ export default async function Home() {
 	});
 	return (
 		<>
-		{/* to fix */}
+		{/* to fix. */}
 			<Container>{session ? <HomePage /> : <GetStarted />}</Container>
 		</>
 	);
